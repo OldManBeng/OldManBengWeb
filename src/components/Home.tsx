@@ -427,7 +427,7 @@ export function NovelIntro({ onNovel }: { onNovel: (id: string) => void }) {
           </p>
           <a
             className="btn primary"
-            href="http://benglaotou.flask.fun"
+            href="https://benglaotou.flask.fun"
             target="_blank"
             rel="noopener noreferrer"
           >

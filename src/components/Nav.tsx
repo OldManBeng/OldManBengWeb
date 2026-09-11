@@ -44,7 +44,7 @@ export function Nav({ onNovel, hash }: { onNovel: () => void; hash?: string }) {
           <a className="cta" href="#serial" onClick={(e) => { e.preventDefault(); setOpen(false); onNovel(); }}>
             阅读连载
           </a>
-          <a className="cta game" href="http://benglaotou.flask.fun" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+          <a className="cta game" href="https://benglaotou.flask.fun" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
             进入游戏 ↗
           </a>
         </div>
