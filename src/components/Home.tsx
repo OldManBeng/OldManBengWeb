@@ -128,7 +128,7 @@ export function Setting() {
         <div className="eyebrow">设定 <span className="dot">·</span> 规则驱动 · 无 LLM</div>
         <h2 className="section-title">三十天，一千五百块</h2>
         <p className="section-lead">
-          {GAMEPLAY.tagline}。一局约一小时。白天计划、入夜排程、聊天话术、他来找你、开口红包、性格亲和、麻木休息、风险穿帮——八块齿轮咬在一起。
+          {GAMEPLAY.tagline}。白天计划、入夜排程、聊天话术、他来找你、开口红包、性格亲和、麻木休息、风险穿帮——八块齿轮咬在一起。
         </p>
         <div className="section-kicker" />
 
