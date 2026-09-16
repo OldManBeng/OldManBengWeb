@@ -112,7 +112,7 @@ export function ComfortNav({ onSwitch, onSerial }: { onSwitch: () => void; onSer
         <a className="brand" href="#/c/top" onClick={() => setOpen(false)}>
           <span className="moon-dot c-sun-dot" />
           <span>情感反诈模拟器</span>
-          <small>· 舒适圈 · 家的账本</small>
+          <small>· 舒适圈 · 《家的账本》</small>
         </a>
         <button
           className="nav-burger"
@@ -152,7 +152,7 @@ function Hero({ onNovel }: { onNovel: () => void }) {
         <div className="c-hero-copy">
           <div className="hero-eyebrow">暗线 · 舒适圈 · v1.1</div>
           <h1>舒适圈</h1>
-          <div className="h1-sub">常用手机 · 家的账本</div>
+          <div className="h1-sub">常用手机 · 《家的账本》</div>
           <p className="hero-tagline">
             工作手机讲「法」，常用手机讲「情」。<br />
             这边的人问「吃了吗」，问完了不会给你转 520——他们只是想知道你吃没吃。
@@ -165,7 +165,7 @@ function Hero({ onNovel }: { onNovel: () => void }) {
             <div className="hero-stat"><span className="v">4</span><span className="l">位联系人</span></div>
             <div className="hero-stat"><span className="v">40</span><span className="l">分钟 / 日 · 联系时间</span></div>
             <div className="hero-stat"><span className="v">11</span><span className="l">张日历剧情卡</span></div>
-            <div className="hero-stat"><span className="v">0</span><span className="l">惩罚 · 只交代来路</span></div>
+            <div className="hero-stat"><span className="v">0</span><span className="l">惩罚 · 纯故事线</span></div>
           </div>
         </div>
 
@@ -204,8 +204,7 @@ function CBackground() {
         <div className="eyebrow">背景 <span className="dot">·</span> 两条线，一个主题</div>
         <h2 className="section-title">常用手机，暖色的那部</h2>
         <p className="section-lead">
-          明线讲「法」——她怎么开口、怎么穿帮、怎么落到判决书上。
-          暗线讲「情」——这笔债，是从哪个家里长出来的。
+          明线的每一笔账，都是从这个家里长出来的。要看懂它，先认识这部手机里住着的人。
         </p>
         <div className="section-kicker" />
 
@@ -267,8 +266,7 @@ function CSetting() {
         <div className="eyebrow">设定 <span className="dot">·</span> 纯故事线 · 不改数值</div>
         <h2 className="section-title">四十分钟，怎么花</h2>
         <p className="section-lead">
-          暗线是纯故事：不改结算、不改结局、无惩罚。它只负责一件事——把明线没交代的，交代清楚。
-          时间花给谁，就是爱给了谁。
+          这部手机不考操作：聊天不耗体力，剧情只能听完。它只问你一件事——今天的联系时间，花给谁。
         </p>
         <div className="section-kicker" />
 
@@ -369,6 +367,11 @@ function CSetting() {
 }
 
 /* ───────────────────────── 角色 ───────────────────────── */
+/** 凤霞姨的"花名册"：10 位相亲对象头像（对应游戏 comfort-dates.ts）。 */
+const ROSTER_AVATARS = [
+  'chen', 'feng', 'he', 'jiang', 'sun', 'wu', 'xu', 'zhao', 'zheng', 'zhou',
+].map((id) => ({ id, src: `/img/comfort/dates/${id}.png` }));
+
 function CCharacters() {
   return (
     <section id="characters">
@@ -414,6 +417,16 @@ function CCharacters() {
                       <figcaption className="cap">{ph.caption}</figcaption>
                     </figure>
                   ))}
+                </div>
+              )}
+              {c.roster && (
+                <div className="c-roster">
+                  <div className="c-roster-row">
+                    {ROSTER_AVATARS.map((a) => (
+                      <img key={a.id} src={a.src} alt={a.id} loading="lazy" title={a.id} />
+                    ))}
+                  </div>
+                  <p className="c-roster-cap">{c.roster.caption}</p>
                 </div>
               )}
               <div className="char-foot">
@@ -470,8 +483,8 @@ function CEndings() {
         <div className="eyebrow">结局 <span className="dot">·</span> 暗线不改结局</div>
         <h2 className="section-title">只交代来路</h2>
         <p className="section-lead">
-          舒适圈不新增结局、不影响明线的任何分支。它只做一件事：给每个结局补上"这笔账是从哪来的"。
-          唯一属于暗线自己的收束，是阿凯的崩坏——殊途，同罪。
+          暗线不新增结局、不影响明线的任何分支——它给每个结局补上这笔账的来路。
+          唯一属于暗线自己的收束，是阿凯的崩坏：殊途，同罪。
         </p>
         <div className="section-kicker" />
 
@@ -574,17 +587,18 @@ export function ComfortFooter({ onSwitch, onNovel }: { onSwitch: () => void; onN
             <small>暗线《家的账本》· 一部暖色的、素颜的手机</small>
           </div>
           <p className="f-warn">
-            本页为《情感反诈模拟器》暗线"舒适圈"官网。暗线台词与明线同一审计口径：
-            全库零重复、称呼不越界、无可操作细节；催收与网贷的描写止于"电话、短信、风险提示"三个词。
-            所有角色均为虚构的艺术抽象。亲情再伟大，也不能凌驾于法律之上。
+            本页是《情感反诈模拟器》暗线「舒适圈」官网。所有人物与台词均为虚构的艺术演绎，
+            不含任何可模仿的操作细节；涉及催收与网贷的描写，止于"电话、短信、风险提示"。
+            亲情再伟大，也不能凌驾于法律之上。如果你正在经历类似的处境——无论是孤独还是债务——
+            请寻求身边真实的帮助。
           </p>
           <p className="f-copy">© 情感反诈模拟器 · 舒适圈官网 · 暗线《家的账本》全文收录</p>
         </div>
         <ul>
-          <li><a href="#/c/background">暗线背景</a></li>
-          <li><a href="#/c/setting">玩法设定</a></li>
-          <li><a href="#/c/characters">通讯录</a></li>
-          <li><a href="#/c/endings">结局矩阵</a></li>
+          <li><a href="#/c/background">背景</a></li>
+          <li><a href="#/c/setting">设定</a></li>
+          <li><a href="#/c/characters">角色</a></li>
+          <li><a href="#/c/endings">结局</a></li>
           <li><a href="#/c/serial" onClick={(e) => { e.preventDefault(); onNovel(); }}>小说连载</a></li>
           <li><a href="#top" onClick={(e) => { e.preventDefault(); onSwitch(); }}>⇄ 切回工作手机</a></li>
         </ul>
