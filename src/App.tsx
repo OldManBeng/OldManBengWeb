@@ -55,11 +55,30 @@ export function App() {
 
   // 锚点兜底：浏览器原生 hash 滚动可能早于 React 渲染完成，
   // 挂载/切视图后若 hash 是页内锚点，再滚一次。
+  // 先用同位 instant 滚动打断浏览器原生的长动画（CSS scroll-behavior:smooth
+  // 会与本兜底竞争导致过冲/未达）；随后多时点 instant 校准（rAF / 400ms / 1200ms /
+  // 字体就绪）——display=swap 字体晚到与 rAF 节流都会让单次定位漂移。
+  // 用户一旦主动滚动（滚轮/触屏）即停止校准，避免拉扯。
   useEffect(() => {
     if (loc.view.kind !== 'home' || !loc.anchor) return;
-    requestAnimationFrame(() => {
-      document.getElementById(loc.anchor)?.scrollIntoView({ behavior: 'auto' });
-    });
+    let cancelled = false;
+    const jump = () => {
+      if (cancelled) return;
+      document.getElementById(loc.anchor)?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    };
+    window.scrollTo({ top: window.scrollY, behavior: 'instant' });
+    jump();
+    const raf = requestAnimationFrame(jump);
+    const timers = [400, 1200].map((d) => window.setTimeout(jump, d));
+    document.fonts.ready.then(jump);
+    const stop = () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+    window.addEventListener('wheel', stop, { passive: true, once: true });
+    window.addEventListener('touchmove', stop, { passive: true, once: true });
+    return stop;
   }, [loc]);
 
   // 旁白遮罩兜底清除（正常由自身动画播完即隐，这里防动画被降级禁用后残留）
