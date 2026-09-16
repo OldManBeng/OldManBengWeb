@@ -8,7 +8,7 @@ const LINKS = [
   { href: '#serial', label: '小说' },
 ];
 
-export function Nav({ onNovel, hash }: { onNovel: () => void; hash?: string }) {
+export function Nav({ onNovel, hash, onSwitch }: { onNovel: () => void; hash?: string; onSwitch: () => void }) {
   const [open, setOpen] = useState(false);
 
   // 移动端菜单打开时禁止背景滚动是过度设计，这里保持简单
@@ -37,6 +37,13 @@ export function Nav({ onNovel, hash }: { onNovel: () => void; hash?: string }) {
           <span style={{ transform: open ? 'translateY(-7px) rotate(-45deg)' : 'none' }} />
         </button>
         <div className={`nav-links${open ? ' open' : ''}`}>
+          <button
+            className="nav-switch"
+            onClick={() => { setOpen(false); onSwitch(); }}
+            title="妈和阿凯在的那部手机——暖色的，聊天不耗体力"
+          >
+            ⇄ 切换常用手机
+          </button>
           {LINKS.map((l) => (
             <a key={l.href} href={l.href} onClick={() => setOpen(false)}
               aria-current={hash?.startsWith(l.href) ? 'page' : undefined}>{l.label}</a>

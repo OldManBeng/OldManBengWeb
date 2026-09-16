@@ -650,3 +650,137 @@ section:nth-of-type(6) .card { animation-delay: 0ms; }
   }
   .btn:active { transform: none; }
 }
+
+/* ============================================================================
+   双官网 · 切机系统（复刻游戏内「工作手机 ⇄ 常用手机」翻面动画）
+   两套官网是同一张卡的正反面：新的一面从侧面 88° 翻入
+   （工作手机自左 phone-flip-l，常用手机自右 phone-flip-r），
+   翻入途中亮度闪光 + 一道扫光掠过，同时落一行切机旁白。620ms，干脆利落。
+   ============================================================================ */
+
+.site-root { position: relative; }
+
+.site-flip {
+  transform-origin: 50% 50%;
+  animation-duration: 620ms;
+  animation-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1);
+  animation-fill-mode: both;
+  will-change: transform, filter, opacity;
+}
+.site-flip.site-flip-l { animation-name: site-flip-l; }
+.site-flip.site-flip-r { animation-name: site-flip-r; }
+
+@keyframes site-flip-l {
+  0%   { opacity: 0; transform: perspective(1100px) rotateY(-88deg) scale(0.92); filter: brightness(2.2) saturate(0.6); }
+  55%  { opacity: 1; }
+  100% { opacity: 1; transform: perspective(1100px) rotateY(0) scale(1); filter: none; }
+}
+@keyframes site-flip-r {
+  0%   { opacity: 0; transform: perspective(1100px) rotateY(88deg) scale(0.92); filter: brightness(2.2) saturate(0.6); }
+  55%  { opacity: 1; }
+  100% { opacity: 1; transform: perspective(1100px) rotateY(0) scale(1); filter: none; }
+}
+
+/* 扫光：翻面瞬间一道光掠过整屏（power-on 的那一下反光） */
+.site-flip::after {
+  content: ''; position: fixed; inset: 0; z-index: 9980; pointer-events: none;
+  background: linear-gradient(105deg, transparent 32%, rgba(255, 255, 255, 0.3) 50%, transparent 68%);
+  background-size: 260% 100%;
+  background-position: 130% 0;
+  animation: site-flip-sweep 620ms ease-out both;
+}
+@keyframes site-flip-sweep { to { background-position: -130% 0; } }
+
+/* 切机旁白遮罩：一束方向光 + 一行旁白（温情 vs 算计） */
+.site-veil {
+  position: fixed; inset: 0; z-index: 9990; pointer-events: none;
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.site-veil::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 28%, var(--veil-c) 50%, transparent 72%);
+  background-size: 300% 100%; background-position: 130% 0;
+  animation: site-veil-sweep 1000ms ease-out both;
+}
+.site-veil.to-comfort { --veil-c: rgba(255, 209, 138, 0.4); }
+.site-veil.to-work { --veil-c: rgba(74, 144, 226, 0.3); }
+@keyframes site-veil-sweep { to { background-position: -130% 0; } }
+
+.site-veil .veil-line {
+  position: relative; max-width: 46ch; text-align: center;
+  font-family: var(--kai); font-size: clamp(15px, 2.6vw, 21px); line-height: 2;
+  padding: 20px 30px; border-radius: 16px;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+  animation: site-veil-line 1500ms ease both;
+}
+.site-veil.to-comfort .veil-line {
+  color: #6b3c07; background: rgba(255, 243, 224, 0.92);
+  border: 1px solid rgba(184, 90, 10, 0.3);
+}
+.site-veil.to-work .veil-line {
+  color: #cfe0f5; background: rgba(10, 16, 26, 0.88);
+  border: 1px solid rgba(90, 155, 216, 0.4);
+}
+@keyframes site-veil-line {
+  0% { opacity: 0; transform: translateY(14px); }
+  18% { opacity: 1; transform: translateY(0); }
+  78% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-8px); }
+}
+
+/* 导航切机按钮（两套官网共用基座，配色各自覆盖） */
+.nav-switch {
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  padding: 7px 14px; border-radius: 999px; cursor: pointer;
+  background: transparent; white-space: nowrap;
+  border: 1px solid var(--line-strong); color: var(--text-dim);
+  transition: all .2s;
+}
+.nav-switch:hover { color: var(--moon); border-color: var(--amber); }
+.nav-switch:not(.c-nav-switch) {
+  border-color: rgba(216, 150, 74, 0.6);
+  color: #edb887;
+}
+.nav-switch:not(.c-nav-switch):hover {
+  background: rgba(216, 150, 74, 0.12);
+  border-color: #d89b5a; color: #f4cf9a;
+}
+
+/* 悬浮切机钮：常驻右下角，两台小手机图腾 */
+.phone-fab {
+  position: fixed; right: 18px; bottom: 18px; z-index: 60;
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 16px 10px 12px; border-radius: 999px; cursor: pointer;
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  border: 1px solid var(--line-strong);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+.phone-fab:hover { transform: translateY(-2px); }
+.phone-fab .pf-glyph {
+  width: 26px; height: 18px; border-radius: 5px; position: relative; flex-shrink: 0;
+}
+.phone-fab .pf-glyph::before, .phone-fab .pf-glyph::after {
+  content: ''; position: absolute; top: 0; width: 15px; height: 18px; border-radius: 4px;
+}
+.phone-fab .pf-glyph::before { left: 0; }
+.phone-fab .pf-glyph::after { right: 0; transform: scale(0.78); transform-origin: bottom right; opacity: 0.45; }
+.phone-fab.to-comfort { background: rgba(255, 250, 240, 0.92); color: #7a4a12; border-color: rgba(184, 90, 10, 0.4); }
+.phone-fab.to-comfort .pf-glyph::before { background: linear-gradient(180deg, #d97b1f, #b85a0a); }
+.phone-fab.to-comfort .pf-glyph::after { background: #1a2438; }
+.phone-fab.to-work { background: rgba(10, 16, 26, 0.9); color: #cfe0f5; border-color: rgba(90, 155, 216, 0.45); }
+.phone-fab.to-work .pf-glyph::before { background: linear-gradient(180deg, #3d7fbf, #2e6da4); }
+.phone-fab.to-work .pf-glyph::after { background: #f0dfc0; }
+.phone-fab .pf-arrow { font-size: 14px; opacity: 0.8; }
+
+@media (max-width: 640px) {
+  .phone-fab { right: 12px; bottom: 12px; padding: 9px 13px 9px 10px; font-size: 12px; }
+}
+
+/* 切机动效降级 */
+@media (prefers-reduced-motion: reduce) {
+  .site-flip, .site-flip::after, .site-veil, .site-veil::before, .site-veil .veil-line { animation: none; }
+  .site-veil { display: none; }
+  .phone-fab:hover { transform: none; }
+}
