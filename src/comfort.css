@@ -49,6 +49,18 @@
 }
 .comfort-site .nav-links.open { background: rgba(255, 250, 240, 0.97); }
 .comfort-site .nav-links a:hover { background: rgba(184, 90, 10, 0.07); }
+/* 浅色主题下 hover 语义与冷色版相反：加深底色而不是变亮，
+   否则近白文字（--ink-900 已翻转）叠在变浅的橙底上会看不清 */
+.comfort-site .nav-links a.cta:hover {
+  background: var(--amber-strong);
+  border-color: var(--amber-strong);
+  color: #fffdf8;
+}
+.comfort-site .btn.primary:hover {
+  background: var(--amber-strong);
+  border-color: var(--amber-strong);
+  color: #fffdf8;
+}
 .comfort-site .footer { background: rgba(251, 243, 228, 0.72); }
 .comfort-site .backdrop {
   background:
